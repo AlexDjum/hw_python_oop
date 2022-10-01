@@ -14,12 +14,13 @@ class InfoMessage:
 
     def get_message(self) -> str:
         message = ['Тип тренировки: {}; '.format(self.training_type),
-                'Длительность: {:.3f} ч.; '.format(self.duration),
-                'Дистанция: {:.3f} км; '.format(self.distance),
-                'Ср. скорость: {:.3f} км/ч; '.format(self.speed),
-                'Потрачено ккал: {:.3f}.'.format(self.calories)
-        ]
+                   'Длительность: {:.3f} ч.; '.format(self.duration),
+                   'Дистанция: {:.3f} км; '.format(self.distance),
+                   'Ср. скорость: {:.3f} км/ч; '.format(self.speed),
+                   'Потрачено ккал: {:.3f}.'.format(self.calories)
+                   ]
         return ''.join(message)
+
 
 @dataclass
 class UnknownWorkoutType(Exception):
