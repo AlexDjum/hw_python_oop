@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, asdict
 from typing import Any, ClassVar, Dict
 
 
@@ -11,18 +11,17 @@ class InfoMessage:
     distance: float
     speed: float
     calories: float
+    output_text = 'Тип тренировки: {training_type}; ' + \
+                  'Длительность: {duration:.3f} ч.; ' + \
+                  'Дистанция: {distance:.3f} км; ' + \
+                  'Ср. скорость: {speed:.3f} км/ч; ' + \
+                  'Потрачено ккал: {calories:.3f}.'
 
     def get_message(self) -> str:
-        message = ['Тип тренировки: {}; '.format(self.training_type),
-                   'Длительность: {:.3f} ч.; '.format(self.duration),
-                   'Дистанция: {:.3f} км; '.format(self.distance),
-                   'Ср. скорость: {:.3f} км/ч; '.format(self.speed),
-                   'Потрачено ккал: {:.3f}.'.format(self.calories)
-                   ]
+        message = self.output_text.format(**asdict(self))
         return ''.join(message)
 
 
-@dataclass
 class UnknownWorkoutType(Exception):
     '''Класс для неизвестной тренировки'''
     print(Exception)
