@@ -11,15 +11,15 @@ class InfoMessage:
     distance: float
     speed: float
     calories: float
-    output_text = 'Тип тренировки: {training_type}; ' + \
-                  'Длительность: {duration:.3f} ч.; ' + \
-                  'Дистанция: {distance:.3f} км; ' + \
-                  'Ср. скорость: {speed:.3f} км/ч; ' + \
-                  'Потрачено ккал: {calories:.3f}.'
+    OUTPUT_TEXT: ClassVar[str] = 'Тип тренировки: {training_type}; ' + \
+                                 'Длительность: {duration:.3f} ч.; ' + \
+                                 'Дистанция: {distance:.3f} км; ' + \
+                                 'Ср. скорость: {speed:.3f} км/ч; ' + \
+                                 'Потрачено ккал: {calories:.3f}.'
 
     def get_message(self) -> str:
-        message = self.output_text.format(**asdict(self))
-        return ''.join(message)
+        message = self.OUTPUT_TEXT.format(**asdict(self))
+        return message
 
 
 class UnknownWorkoutType(Exception):
@@ -27,16 +27,20 @@ class UnknownWorkoutType(Exception):
     print(Exception)
 
 
-@dataclass
 class Training:
     """Базовый класс тренировки."""
     LEN_STEP: ClassVar[float] = 0.65
     M_IN_KM: ClassVar[int] = 1000
     MINUTES_IN_HOURS: ClassVar[int] = 60
 
-    action: int
-    duration: float
-    weight: float
+    def __init__(self,
+                 action: int,
+                 duration: float,
+                 weight: float) -> None:
+
+        self.action = action
+        self.duration = duration
+        self.weight = weight
 
     def get_distance(self) -> float:
         """Получить дистанцию в км."""
@@ -79,16 +83,18 @@ class Running(Training):
         return spent_calories
 
 
-@dataclass
 class SportsWalking(Training):
     """Тренировка: спортивная ходьба."""
     COEFF_SPEED: ClassVar[float] = 0.035
     COEFF_DURATION: ClassVar[float] = 0.029
 
-    action: int
-    duration: float
-    weight: float
-    height: float
+    def __init__(self,
+                 action: int,
+                 duration: float,
+                 weight: float,
+                 height: float) -> None:
+        super().__init__(action, duration, weight)
+        self.height = height
 
     def get_spent_calories(self) -> float:
         '''Расход калорий для спортивной ходьбы.'''
@@ -100,18 +106,21 @@ class SportsWalking(Training):
         return spent_calories
 
 
-@dataclass
 class Swimming(Training):
     """Тренировка: плавание."""
     LEN_STEP: ClassVar[float] = 1.38
     COEFF_WATER_RESIST: ClassVar[float] = 1.1
     COEFF_ACTIVITY: ClassVar[int] = 2
 
-    action: int
-    duration: float
-    weight: float
-    length_pool: int
-    count_pool: int
+    def __init__(self,
+                 action: int,
+                 duration: float,
+                 weight: float,
+                 length_pool: int,
+                 count_pool: int) -> None:
+        super().__init__(action, duration, weight)
+        self.length_pool = length_pool
+        self.count_pool = count_pool
 
     def get_spent_calories(self) -> float:
         '''Расчёт израсходованных калорий при плавании.'''
